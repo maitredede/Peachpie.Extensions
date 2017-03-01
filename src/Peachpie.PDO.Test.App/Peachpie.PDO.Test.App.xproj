@@ -6,8 +6,8 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>0610fa55-28f8-48f4-82c0-511849933c31</ProjectGuid>
-    <RootNamespace>Peachpie.PDO</RootNamespace>
+    <ProjectGuid>77ad346e-0cb1-4e27-83ce-5af2ff507d4d</ProjectGuid>
+    <RootNamespace>Peachpie.PDO.Test</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -15,5 +15,9 @@
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
-  <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.targets" Condition="'$(VSToolsPath)' != ''" />
+  <ItemGroup>
+    <DnxInvisibleContent Include="bower.json" />
+    <DnxInvisibleContent Include=".bowerrc" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\DotNet.Web\Microsoft.DotNet.Web.targets" Condition="'$(VSToolsPath)' != ''" />
 </Project>

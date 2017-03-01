@@ -1,0 +1,27 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Peachpie.PDO": { "target": "project" }
+  },
+
+  "buildOptions": {
+    "preserveCompilationContext": true,
+    "xmlDoc": true
+  },
+  
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50",
+      "dependencies": {
+        "NETStandard.Library": "1.6.1",
+        "Microsoft.Data.Sqlite": "1.1.0"
+      }
+    },
+    "net46": {
+      "dependencies": {
+        "System.Data.SQLite.Core": "1.0.104"
+      }
+    }
+  }
+}

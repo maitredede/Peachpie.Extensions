@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Peachpie.PDO")]
+[assembly: AssemblyProduct("Peachpie.PDO.Application")]
 [assembly: AssemblyTrademark("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
@@ -16,6 +16,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("0610fa55-28f8-48f4-82c0-511849933c31")]
-
-[assembly: Pchp.Core.PhpExtension("pdo", Registrator = typeof(Peachpie.PDO.PDORegistrator))]
+[assembly: Guid("8dbc8930-b49c-4132-b57d-97987a9d1e2b")]

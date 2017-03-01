@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PeachPie.PDO
+namespace Peachpie.PDO
 {
-    public class Class1
+    public class PDOStatement : IPDOStatement
     {
-        public Class1()
-        {
-        }
     }
 }

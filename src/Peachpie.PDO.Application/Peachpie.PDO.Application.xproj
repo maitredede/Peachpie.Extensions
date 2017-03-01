@@ -6,7 +6,7 @@
   </PropertyGroup>
   <Import Project="$(VSToolsPath)\DotNet\Microsoft.DotNet.Props" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>0610fa55-28f8-48f4-82c0-511849933c31</ProjectGuid>
+    <ProjectGuid>8dbc8930-b49c-4132-b57d-97987a9d1e2b</ProjectGuid>
     <RootNamespace>Peachpie.PDO</RootNamespace>
     <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)'=='' ">.\obj</BaseIntermediateOutputPath>
     <OutputPath Condition="'$(OutputPath)'=='' ">.\bin\</OutputPath>

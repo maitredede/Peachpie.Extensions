@@ -1,0 +1,44 @@
+﻿using Pchp.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Peachpie.PDO
+{
+    [PhpHidden]
+    public static class PDOEngine
+    {
+        private static readonly Dictionary<string, IPDODriver> s_drivers = new Dictionary<string, IPDODriver>();
+
+        public static void RegisterDriver<TDriver>() where TDriver : IPDODriver, new()
+        {
+            var driver = new TDriver();
+            lock (s_drivers)
+            {
+                if (!s_drivers.ContainsKey(driver.Name))
+                {
+                    s_drivers.Add(driver.Name, driver);
+                }
+            }
+        }
+
+        internal static string[] GetDriverNames()
+        {
+            lock (s_drivers)
+            {
+                return s_drivers.Keys.ToArray();
+            }
+        }
+
+        internal static IPDODriver GetDriver(string driverName)
+        {
+            lock (s_drivers)
+            {
+                if (!s_drivers.ContainsKey(driverName))
+                    return null;
+                return s_drivers[driverName];
+            }
+        }
+    }
+}

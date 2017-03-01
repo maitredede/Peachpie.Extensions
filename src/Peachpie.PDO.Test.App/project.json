@@ -1,0 +1,58 @@
+{
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.1.0",
+      "type": "platform"
+    },
+    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+    "Microsoft.Extensions.Logging.Console": "1.1.0",
+    "Peachpie.NETCore.Web": "0.5.0-preview4",
+    "Microsoft.AspNetCore.Hosting": "1.1.0",
+    "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+    "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+    "Peachpie.PDO": { "target": "project" },
+    "Peachpie.PDO.MySQL": { "target": "project" },
+    "Peachpie.PDO.Sqlite": { "target": "project" },
+    "Peachpie.PDO.Pgsql": { "target": "project" },
+    "Peachpie.PDO.Application": { "target": "project" },
+    "Peachpie.PDO.Test.Website": { "target": "project" }
+  },
+
+  "tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final",
+    "Microsoft.DotNet.Watcher.Tools": "1.1.0-preview4-final"
+  },
+
+  "frameworks": {
+    "netcoreapp1.1": {
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "preserveCompilationContext": true,
+    "debugType": "portable"
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "web.config"
+    ]
+  },
+
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  }
+}
