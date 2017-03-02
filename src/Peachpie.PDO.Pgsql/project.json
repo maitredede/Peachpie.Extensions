@@ -2,7 +2,9 @@
   "version": "0.5.0-*",
 
   "dependencies": {
-    "Peachpie.PDO": { "target": "project" },
+    "NETStandard.Library": "1.6.1",
+  
+      "Peachpie.PDO": { "target": "project" },
 
     "Npgsql": "3.2.1"
   },
@@ -14,11 +16,7 @@
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50",
-      "dependencies": {
-        "NETStandard.Library": "1.6.1"
-      }
-    },
-    "net46": {}
+      "imports": "dnxcore50"
+    }
   }
 }

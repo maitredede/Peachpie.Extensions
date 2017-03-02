@@ -35,6 +35,6 @@ before_install:
   - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
 
 script:
-  - dotnet restore ./src
+  - dotnet restore src --disable-parallel --force-english-output
   - dotnet restore src/Peachpie.PDO.Test.App
   - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
