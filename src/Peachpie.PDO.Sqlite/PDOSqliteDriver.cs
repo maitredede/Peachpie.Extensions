@@ -69,5 +69,14 @@ namespace Peachpie.PDO.Sqlite
             return PhpValue.False;
 #endif
         }
+
+        public override string GetLastInsertId(PDO pdo, string name)
+        {
+            using (var cmd = pdo.CreateCommand("SELECT LAST_INSERT_ROW_ID()"))
+            {
+                object value = cmd.ExecuteScalar();
+                return value?.ToString();
+            }
+        }
     }
 }
