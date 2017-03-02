@@ -18,31 +18,33 @@
 language: csharp
 dist: trusty
 sudo: required
-mono: latest
+mono: none
+dotnet: 1.0.0-preview2.1-003177
 
-addons:
-  apt:
-    packages:
-    - gettext
-    - libunwind8
-    - libicu52
+#addons:
+#  apt:
+#    packages:
+#    - gettext
+#    - libunwind8
+#    - libicu52
 
 cache:
   directories:
     - $HOME/.nuget
 
-before_install:
-  - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
-  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
-  - sudo apt-get update
-  - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
+#before_install:
+#  - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+#  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+#  - sudo apt-get update
+#  - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
 
 script:
-  - mono --version
+#  - mono --version
   - dotnet --info
-  - nuget --help
-  - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-  - mono nuget.exe restore Peachpie.Extensions.sln
+#  - nuget --help
+#  - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+#  - mono nuget.exe restore Peachpie.Extensions.sln
+  - dotnet restore
 #  - dotnet restore src --disable-parallel --force-english-output
 #  - dotnet restore src/Peachpie.PDO.Test.App
   - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
