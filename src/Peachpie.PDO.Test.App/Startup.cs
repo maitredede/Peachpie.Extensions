@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Peachpie.Web;
 using System.Reflection;
 using Microsoft.Extensions.DependencyModel;
+using Peachpie.Library.PDO;
 
 namespace Peachpie.PDO.Test
 {
@@ -42,35 +43,6 @@ namespace Peachpie.PDO.Test
                     "Peachpie.PDO.Test.Website"
                 }
             };
-
-            ////HACK to register PHP extension parts not used by scripts
-            ////DependencyContext.Default.CompileLibraries
-            //// Default DependencyContext is retrieved from entry assembly
-            //var deps = DependencyContext.Default;
-            //Console.WriteLine($"Compilation depenencies");
-            //foreach (var compilationLibrary in deps.CompileLibraries)
-            //{
-            //    Console.WriteLine($"\tPackage {compilationLibrary} {compilationLibrary.Version}");
-            //    // ResolveReferencePaths returns full paths to compilation assemblies
-            //    foreach (var resolveReferencePath in compilationLibrary.ResolveReferencePaths())
-            //    {
-            //        Console.WriteLine($"\t\tReference path: {resolveReferencePath}");
-            //    }
-            //}
-
-            //Console.WriteLine($"Runtime depenencies");
-            //foreach (var compilationLibrary in deps.RuntimeLibraries)
-            //{
-            //    Console.WriteLine($"\tPackage {compilationLibrary} {compilationLibrary.Version}");
-            //    foreach (var assembly in compilationLibrary.Assemblies)
-            //    {
-            //        Console.WriteLine($"\t\tReference: {assembly.Name}");
-            //    }
-            //}
-
-            //PHPHelper.RegisterExtensionAssembly<MySQL.PDOMySQLDriver>();
-            //PHPHelper.RegisterExtensionAssembly<Sqlite.PDOSqliteDriver>();
-            //PHPHelper.RegisterExtensionAssembly<Pgsql.PDONpgsqlDriver>();
 
             PDOHelper.RegisterAllDrivers();
 

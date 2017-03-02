@@ -6,11 +6,16 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
 using FluentAssertions;
+using Peachpie.Library.PDO;
 
 namespace Peachpie.PDO.Test
 {
     public abstract class BaseTest
     {
+        static BaseTest()
+        {
+            PDOHelper.RegisterAllDrivers();
+        }
         protected string GetTestScriptContent(string name)
         {
             var input = this.GetType().GetTypeInfo().Assembly.GetManifestResourceStream(name);

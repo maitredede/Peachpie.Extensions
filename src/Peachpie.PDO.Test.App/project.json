@@ -11,11 +11,15 @@
     "Microsoft.AspNetCore.Hosting": "1.1.0",
     "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
     "Microsoft.AspNetCore.StaticFiles": "1.1.0",
-    "Peachpie.PDO": { "target": "project" },
-    "Peachpie.PDO.MySQL": { "target": "project" },
-    "Peachpie.PDO.Sqlite": { "target": "project" },
-    "Peachpie.PDO.Pgsql": { "target": "project" },
-    "Peachpie.PDO.Application": { "target": "project" },
+
+    "Peachpie.Library.PDO": { "target": "project" },
+    "Peachpie.Library.PDO.Application": { "target": "project" },
+    "Peachpie.Library.PDO.Firebird": { "target": "project" },
+    "Peachpie.Library.PDO.MySQL": { "target": "project" },
+    "Peachpie.Library.PDO.PgSQL": { "target": "project" },
+    "Peachpie.Library.PDO.Sqlite": { "target": "project" },
+    "Peachpie.Library.PDO.SqlSrv": { "target": "project" },
+
     "Peachpie.PDO.Test.Website": { "target": "project" }
   },
 
