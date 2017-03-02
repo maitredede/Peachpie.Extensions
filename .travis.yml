@@ -1,4 +1,6 @@
-## source https://rimdev.io/building-net-core-on-travis-ci/
+# source https://rimdev.io/building-net-core-on-travis-ci/
+# source : https://github.com/tmds/Tmds.DBus/blob/master/.travis.yml
+
 #language: csharp
 #dist: trusty
 #sudo: required
@@ -11,11 +13,12 @@
 #  - dotnet restore
 #  - dotnet build src\Peachpie.PDO.Test.App
 
-# source : https://github.com/tmds/Tmds.DBus/blob/master/.travis.yml
 
-language: generic
+#language: generic
+language: csharp
 dist: trusty
 sudo: required
+mono: latest
 
 addons:
   apt:
@@ -35,6 +38,11 @@ before_install:
   - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
 
 script:
-  - dotnet restore src --disable-parallel --force-english-output
-  - dotnet restore src/Peachpie.PDO.Test.App
+  - mono --version
+  - dotnet --info
+  - nuget --help
+  - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+  - mono nuget.exe restore Peachpie.Extensions.sln
+#  - dotnet restore src --disable-parallel --force-english-output
+#  - dotnet restore src/Peachpie.PDO.Test.App
   - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
