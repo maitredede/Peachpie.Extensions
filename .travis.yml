@@ -36,4 +36,5 @@ before_install:
 
 script:
   - dotnet restore ./src
+  - dotnet restore src/Peachpie.PDO.Test.App
   - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
