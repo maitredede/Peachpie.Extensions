@@ -8,6 +8,9 @@ cache:
   directories:
     - $HOME/.nuget
 
+install:
+  - sudo apt-get install -y dotnet-sharedframework-microsoft.netcore.app-1.0.0
+
 script:
   - dotnet restore
   - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
