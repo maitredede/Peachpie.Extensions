@@ -1,12 +1,35 @@
-# source https://rimdev.io/building-net-core-on-travis-ci/
-language: csharp
+## source https://rimdev.io/building-net-core-on-travis-ci/
+#language: csharp
+#dist: trusty
+#sudo: required
+#mono: none
+#dotnet: 1.0.0-preview2-003131
+#
+## install:
+##   - ./build/install_dependencies_ubuntu14.sh
+#script:
+#  - dotnet restore
+#  - dotnet build src\Peachpie.PDO.Test.App
+
+# source : https://github.com/tmds/Tmds.DBus/blob/master/.travis.yml
+
+language: generic
 dist: trusty
 sudo: required
-mono: none
-dotnet: 1.0.0-preview2-003131
 
-# install:
-#   - ./build/install_dependencies_ubuntu14.sh
+addons:
+  apt:
+    packages:
+    - gettext
+    - libunwind8
+    - libicu52
+
+before_install:
+  - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
+  - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
+  - sudo apt-get update
+  - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
+
 script:
   - dotnet restore
   - dotnet build src\Peachpie.PDO.Test.App
