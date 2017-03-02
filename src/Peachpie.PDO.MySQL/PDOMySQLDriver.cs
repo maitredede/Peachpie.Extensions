@@ -8,13 +8,21 @@ using System.Data.Common;
 
 namespace Peachpie.PDO.MySQL
 {
+    /// <summary>
+    /// PDO driver class for MySQL
+    /// </summary>
+    /// <seealso cref="Peachpie.PDO.PDODriver" />
     public sealed class PDOMySQLDriver : PDODriver
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PDOMySQLDriver"/> class.
+        /// </summary>
         public PDOMySQLDriver() : base("mysql", MySqlClientFactory.Instance)
         {
 
         }
 
+        /// <inheritDoc />
         protected override string BuildConnectionString(string dsn, string user, string password, PhpArray options)
         {
             //TODO mysql pdo parameters to dotnet connectionstring
@@ -24,11 +32,13 @@ namespace Peachpie.PDO.MySQL
             return csb.ConnectionString;
         }
 
+        /// <inheritDoc />
         public override Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
         {
             return new Dictionary<string, ExtensionMethodDelegate>();
         }
 
+        /// <inheritDoc />
         public override string GetLastInsertId(PDO pdo, string name)
         {
             using (var cmd = pdo.CreateCommand("SELECT LAST_INSERT_ID()"))

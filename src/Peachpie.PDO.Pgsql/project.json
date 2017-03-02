@@ -8,8 +8,9 @@
 
     "Npgsql": "3.2.1"
   },
-  
+
   "buildOptions": {
+    "debugType": "portable",
     "preserveCompilationContext": true,
     "xmlDoc": true
   },

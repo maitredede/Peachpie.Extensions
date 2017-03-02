@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Peachpie.PDO
 {
+    /// <summary>
+    /// Interface of PDO class
+    /// </summary>
     public interface IPDO
     {
         bool beginTransaction();

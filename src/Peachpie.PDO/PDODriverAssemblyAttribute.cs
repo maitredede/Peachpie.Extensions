@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Peachpie.PDO
 {
     /// <summary>
-    /// Tag the assembly as containing PDO driver
+    /// Tag the assembly as containing PDO drivers
     /// </summary>
     /// <seealso cref="System.Attribute" />
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false)]

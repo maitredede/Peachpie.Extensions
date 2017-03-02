@@ -6,11 +6,18 @@ using System.Threading.Tasks;
 
 namespace Peachpie.PDO
 {
+    /// <summary>
+    /// PDOEngine methods
+    /// </summary>
     [PhpHidden]
     public static class PDOEngine
     {
         private static readonly Dictionary<string, IPDODriver> s_drivers = new Dictionary<string, IPDODriver>();
 
+        /// <summary>
+        /// Registers the driver.
+        /// </summary>
+        /// <typeparam name="TDriver">The type of the driver.</typeparam>
         public static void RegisterDriver<TDriver>() where TDriver : IPDODriver, new()
         {
             var driver = new TDriver();

@@ -24,6 +24,10 @@ namespace Peachpie.PDO
         private Dictionary<string, ExtensionMethodDelegate> m_extensionMethods;
 
         internal DbTransaction CurrentTransaction { get { return this.m_tx; } }
+
+        /// <summary>
+        /// Gets the native connection instance
+        /// </summary>
         public DbConnection Connection { get { return this.m_con; } }
 
         private PDO(Context ctx) : base("PDO")
@@ -43,6 +47,8 @@ namespace Peachpie.PDO
         {
             this.__construct(dsn, username, password, options);
         }
+        
+        /// <inheritDoc />
         public void __construct(string dsn, string username = null, string password = null, PhpArray options = null)
         {
             this.SetDefaultAttributes();
@@ -92,8 +98,10 @@ namespace Peachpie.PDO
             this.m_attributes.Set(ATTR_DRIVER_NAME, this.m_driver.Name);
         }
 
+        /// <inheritDoc />
         public bool inTransaction() => this.m_tx != null;
 
+        /// <inheritDoc />
         public PhpValue __call(string name, PhpArray arguments)
         {
             if (this.m_extensionMethods.ContainsKey(name))
@@ -104,6 +112,7 @@ namespace Peachpie.PDO
             throw new PDOException("Method not found");
         }
 
+        /// <inheritDoc />
         protected override void FreeManaged()
         {
             this.m_con.Dispose();
@@ -122,6 +131,11 @@ namespace Peachpie.PDO
         }
 
 
+        /// <summary>
+        /// Creates a DbCommand object.
+        /// </summary>
+        /// <param name="statement">The statement.</param>
+        /// <returns></returns>
         [PhpHidden]
         public DbCommand CreateCommand(string statement)
         {
@@ -132,6 +146,7 @@ namespace Peachpie.PDO
             return dbCommand;
         }
 
+        /// <inheritDoc />
         public PhpValue exec(string statement)
         {
             this.ClearError();
@@ -150,6 +165,7 @@ namespace Peachpie.PDO
             }
         }
 
+        /// <inheritDoc />
         public bool beginTransaction()
         {
             if (this.m_tx != null)
@@ -159,6 +175,7 @@ namespace Peachpie.PDO
             return true;
         }
 
+        /// <inheritDoc />
         public bool commit()
         {
             if (this.m_tx == null)
@@ -168,6 +185,7 @@ namespace Peachpie.PDO
             return true;
         }
 
+        /// <inheritDoc />
         public bool rollback()
         {
             if (this.m_tx == null)
@@ -177,26 +195,31 @@ namespace Peachpie.PDO
             return true;
         }
 
+        /// <inheritDoc />
         public PhpValue getAttribute(int attribute)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritDoc />
         public string lastInsertId(string name = null)
         {
             return this.m_driver.GetLastInsertId(this, name);
         }
 
+        /// <inheritDoc />
         public PDOStatement prepare(string statement, PhpArray driver_options = null)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritDoc />
         public PDOStatement query(string statement, params PhpValue[] args)
         {
             throw new NotImplementedException();
         }
 
+        /// <inheritDoc />
         public string quote(string str, int parameter_type = default(int))
         {
             throw new NotImplementedException();
@@ -227,6 +250,7 @@ namespace Peachpie.PDO
             this.m_attributes.Set(ATTR_EMULATE_PREPARES, false);
         }
 
+        /// <inheritDoc />
         public bool setAttribute(int attribute, PhpValue value)
         {
             try
@@ -269,11 +293,13 @@ namespace Peachpie.PDO
         }
 
         #region Interface artifacts
+        /// <inheritDoc />
         IPDOStatement IPDO.prepare(string statement, PhpArray driver_options)
         {
             return this.prepare(statement, driver_options);
         }
 
+        /// <inheritDoc />
         IPDOStatement IPDO.query(string statement, params PhpValue[] args)
         {
             return this.query(statement, args);

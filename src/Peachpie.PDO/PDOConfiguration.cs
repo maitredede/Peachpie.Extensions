@@ -7,8 +7,13 @@ using System.Threading.Tasks;
 
 namespace Peachpie.PDO
 {
+    /// <summary>
+    /// PDO configuration
+    /// </summary>
+    /// <seealso cref="Pchp.Core.IPhpConfiguration" />
     public class PDOConfiguration : IPhpConfiguration
     {
+        /// <inheritDoc />
         public IPhpConfiguration Copy() => (PDOConfiguration)this.MemberwiseClone();
 
         //public NameValueCollection Alias { get; set; } = new NameValueCollection();

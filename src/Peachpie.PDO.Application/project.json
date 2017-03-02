@@ -7,6 +7,11 @@
     "Microsoft.Extensions.DependencyModel": "1.1.0"
   },
 
+  "buildOptions": {
+    "debugType": "portable",
+    "xmlDoc": true
+  },
+
   "frameworks": {
     "netstandard1.6": {
       "imports": "dnxcore50"

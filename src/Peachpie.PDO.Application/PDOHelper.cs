@@ -7,8 +7,14 @@ using System.Reflection;
 
 namespace Peachpie.PDO
 {
+    /// <summary>
+    /// Helper class
+    /// </summary>
     public static class PDOHelper
     {
+        /// <summary>
+        /// Registers all referenced PDO drivers.
+        /// </summary>
         public static void RegisterAllDrivers()
         {
             string PdoLib = typeof(PDODriverAssemblyAttribute).GetTypeInfo().Assembly.GetName().Name;

@@ -6,5 +6,11 @@ using System.Threading.Tasks;
 
 namespace Peachpie.PDO
 {
+    /// <summary>
+    /// Delegate of extension methods added to PDO
+    /// </summary>
+    /// <param name="pdo">The pdo instance.</param>
+    /// <param name="args">The arguments when method is called.</param>
+    /// <returns>Method return value</returns>
     public delegate PhpValue ExtensionMethodDelegate(PDO pdo, PhpArray args);
 }

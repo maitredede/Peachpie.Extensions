@@ -18,13 +18,21 @@ using ConnectionStringBuilder = Microsoft.Data.Sqlite.SqliteConnectionStringBuil
 
 namespace Peachpie.PDO.Sqlite
 {
+    /// <summary>
+    /// PDO driver class for SQLite
+    /// </summary>
+    /// <seealso cref="Peachpie.PDO.PDODriver" />
     public class PDOSqliteDriver : PDODriver
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PDOSqliteDriver"/> class.
+        /// </summary>
         public PDOSqliteDriver() : base("sqlite", Factory.Instance)
         {
 
         }
 
+        /// <inheritDoc />
         protected override string BuildConnectionString(string dsn, string user, string password, PhpArray options)
         {
             var csb = new ConnectionStringBuilder();
@@ -33,6 +41,7 @@ namespace Peachpie.PDO.Sqlite
             return csb.ConnectionString;
         }
 
+        /// <inheritDoc />
         public override Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
         {
             var methods = new Dictionary<string, ExtensionMethodDelegate>();
@@ -66,9 +75,12 @@ namespace Peachpie.PDO.Sqlite
             // From https://github.com/DEVSENSE/Phalanger/blob/master/Source/Extensions/PDOSQLite/SQLitePDODriver.cs
             // SQLiteFunction.RegisterFunction(func_name, nbr_arg, FunctionType.Scalar, null, d, null);
 #else
+            //Microsoft connector does not support CreateFunction
             return PhpValue.False;
 #endif
         }
+
+        /// <inheritDoc />
 
         public override string GetLastInsertId(PDO pdo, string name)
         {
