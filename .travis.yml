@@ -1,0 +1,12 @@
+# source https://rimdev.io/building-net-core-on-travis-ci/
+language: csharp
+dist: trusty
+sudo: required
+mono: none
+dotnet: 1.0.0-preview2-003131
+
+# install:
+#   - ./build/install_dependencies_ubuntu14.sh
+script:
+  - dotnet restore
+  - dotnet build src\Peachpie.PDO.Test.App
