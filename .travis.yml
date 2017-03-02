@@ -24,6 +24,10 @@ addons:
     - libunwind8
     - libicu52
 
+cache:
+  directories:
+    - $HOME/.nuget
+
 before_install:
   - sudo sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ trusty main" > /etc/apt/sources.list.d/dotnetdev.list'
   - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 417A0893
@@ -31,5 +35,5 @@ before_install:
   - sudo apt-get install dotnet-dev-1.0.0-preview2.1-003177
 
 script:
-  - dotnet restore
-  - dotnet build src\Peachpie.PDO.Test.App
+  - dotnet restore ./src
+  - dotnet build src/Peachpie.PDO.Test.App --configuration Debug --version-suffix dev --build-profile
