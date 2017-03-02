@@ -27,5 +27,10 @@ namespace Peachpie.PDO.Pgsql
         {
             return new Dictionary<string, ExtensionMethodDelegate>();
         }
+
+        public override string GetLastInsertId(PDO pdo, string name)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
