@@ -15,9 +15,8 @@ namespace Peachpie.PDO
         /// <summary>
         /// Get the known PDO drivers
         /// </summary>
-        /// <param name="ctx">The php context.</param>
         /// <returns></returns>
-        public static PhpArray pdo_drivers(Context ctx)
+        public static PhpArray pdo_drivers()
         {
             var phpNames = PDOEngine.GetDriverNames().Select(d => PhpValue.Create(d)).ToArray();
             return PhpArray.New(phpNames);

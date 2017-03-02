@@ -14,7 +14,7 @@ namespace Peachpie.PDO
     /// </summary>
     /// <seealso cref="Pchp.Core.PhpResource" />
     [PhpType("PDO")]
-    public partial class PDO : PhpResource, IPDO
+    public partial class PDO : IDisposable, IPDO
     {
         private readonly Context m_ctx;
         private IPDODriver m_driver;
@@ -30,7 +30,7 @@ namespace Peachpie.PDO
         /// </summary>
         public DbConnection Connection { get { return this.m_con; } }
 
-        private PDO(Context ctx) : base("PDO")
+        private PDO(Context ctx)
         {
             this.m_ctx = ctx;
         }
@@ -47,7 +47,7 @@ namespace Peachpie.PDO
         {
             this.__construct(dsn, username, password, options);
         }
-        
+
         /// <inheritDoc />
         public void __construct(string dsn, string username = null, string password = null, PhpArray options = null)
         {
@@ -113,11 +113,9 @@ namespace Peachpie.PDO
         }
 
         /// <inheritDoc />
-        protected override void FreeManaged()
+        void IDisposable.Dispose()
         {
             this.m_con.Dispose();
-
-            base.FreeManaged();
         }
 
         /// <summary>
@@ -125,9 +123,9 @@ namespace Peachpie.PDO
         /// </summary>
         /// <param name="ctx">The php context.</param>
         /// <returns></returns>
-        public static PhpArray getAvailableDrivers(Context ctx)
+        public static PhpArray getAvailableDrivers()
         {
-            return PDOStatic.pdo_drivers(ctx);
+            return PDOStatic.pdo_drivers();
         }
 
 
