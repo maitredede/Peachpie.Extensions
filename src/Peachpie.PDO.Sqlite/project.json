@@ -3,7 +3,6 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-    "Microsoft.Data.Sqlite": "1.1.0",
     "Peachpie.PDO": { "target": "project" }
   },
 
@@ -11,10 +10,18 @@
     "preserveCompilationContext": true,
     "xmlDoc": true
   },
-  
+
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "Microsoft.Data.Sqlite": "1.1.0"
+      }
+    },
+    "net46": {
+      "dependencies": {
+        "System.Data.SQLite": "1.0.104"
+      }
     }
   }
 }
