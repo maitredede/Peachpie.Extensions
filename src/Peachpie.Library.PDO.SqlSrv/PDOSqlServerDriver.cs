@@ -24,7 +24,11 @@ namespace Peachpie.Library.PDO.SqlSrv
         /// <inheritDoc />
         public override string GetLastInsertId(PDO pdo, string name)
         {
-            throw new NotImplementedException();
+            using (var com = pdo.CreateCommand("SELECT SCOPE_IDENTITY()"))
+            {
+                object value = com.ExecuteScalar();
+                return value?.ToString();
+            }
         }
 
         /// <inheritDoc />
