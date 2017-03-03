@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
+using System.Reflection;
 
 namespace Peachpie.Library.PDO
 {
@@ -17,7 +18,16 @@ namespace Peachpie.Library.PDO
     {
         /// <inheritDoc />
         public string Name { get; }
-     
+
+        /// <inheritDoc />
+        public virtual string ClientVersion
+        {
+            get
+            {
+                return this.DbFactory.GetType().GetTypeInfo().Assembly.GetName().Version.ToString();
+            }
+        }
+
         /// <inheritDoc />
         public DbProviderFactory DbFactory { get; }
 
@@ -69,9 +79,21 @@ namespace Peachpie.Library.PDO
         public abstract string GetLastInsertId(PDO pdo, string name);
 
         /// <inheritDoc />
-        public virtual bool TrySetAttribute(Dictionary<int, object> attributes, int attribute, PhpValue value)
+        public virtual bool TrySetAttribute(Dictionary<PDO.PDO_ATTR, object> attributes, PDO.PDO_ATTR attribute, PhpValue value)
         {
             return false;
+        }
+
+        /// <inheritDoc />
+        public virtual string Quote(string str, PDO.PARAM param)
+        {
+            return null;
+        }
+
+        /// <inheritDoc />
+        public virtual PhpValue GetAttribute(PDO pdo, int attribute)
+        {
+            return PhpValue.Null;
         }
     }
 }

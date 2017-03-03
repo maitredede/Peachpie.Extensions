@@ -8,23 +8,28 @@ using Pchp.Core;
 
 namespace Peachpie.PDO.Test
 {
+    /// <summary>
+    /// SQLite driver tests
+    /// </summary>
+    /// <seealso cref="Peachpie.PDO.Test.BaseTest" />
     public class SqliteDriverTest : BaseTest
     {
+        [Fact]
+        public void PdoSqlite_DriverIsRegistered()
+        {
+            this.RunTest("Peachpie.PDO.Test.SqliteDriver.DriverIsRegistered.php");
+        }
+
         [Fact]
         public void PdoSqlite_CanUseMemoryDSN()
         {
             this.RunTest("Peachpie.PDO.Test.SqliteDriver.CanUseMemoryDSN.php");
         }
+
+        [Fact]
+        public void PdoSqlite_ExecVacuum()
+        {
+            this.RunTest("Peachpie.PDO.Test.SqliteDriver.ExecVacuum.php");
+        }
     }
-
-    //public class TestPhpContext : Context, IHttpPhpContext
-    //{
-    //    public void EvalScript(string phpScript)
-    //    {
-    //        ScriptInfo info  =new ScriptInfo()
-    //        {
-
-    //        }
-    //    }
-    //}
 }

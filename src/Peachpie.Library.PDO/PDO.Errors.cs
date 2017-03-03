@@ -22,11 +22,13 @@ namespace Peachpie.Library.PDO
             throw new NotImplementedException();
         }
 
+        /// <inheritDoc />
         public PhpValue errorCode()
         {
             return this.m_errorCode;
         }
 
+        /// <inheritDoc />
         public PhpValue errorInfo()
         {
             return this.m_errorInfo;

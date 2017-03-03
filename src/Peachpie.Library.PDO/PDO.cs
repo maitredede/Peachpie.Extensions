@@ -20,7 +20,7 @@ namespace Peachpie.Library.PDO
         private IPDODriver m_driver;
         private DbConnection m_con;
         private DbTransaction m_tx;
-        private readonly Dictionary<int, object> m_attributes = new Dictionary<int, object>();
+        private readonly Dictionary<PDO_ATTR, object> m_attributes = new Dictionary<PDO_ATTR, object>();
         private Dictionary<string, ExtensionMethodDelegate> m_extensionMethods;
 
         internal DbTransaction CurrentTransaction { get { return this.m_tx; } }
@@ -94,8 +94,9 @@ namespace Peachpie.Library.PDO
             this.m_extensionMethods = this.m_driver.GetPDObjectExtensionMethods();
 
             this.m_con = this.m_driver.OpenConnection(items[1], username, password, options);
-            this.m_attributes.Set(ATTR_SERVER_VERSION, this.m_con.ServerVersion);
-            this.m_attributes.Set(ATTR_DRIVER_NAME, this.m_driver.Name);
+            this.m_attributes.Set(PDO_ATTR.ATTR_SERVER_VERSION, this.m_con.ServerVersion);
+            this.m_attributes.Set(PDO_ATTR.ATTR_DRIVER_NAME, this.m_driver.Name);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CLIENT_VERSION, this.m_driver.ClientVersion);
         }
 
         /// <inheritDoc />
@@ -119,9 +120,8 @@ namespace Peachpie.Library.PDO
         }
 
         /// <summary>
-        /// This function returns all currently available PDO drivers which can be used in DSN parameter of <see cref="PDO"/> constructor.
+        /// This function returns all currently available PDO drivers which can be used in DSN parameter of <see cref="PDO" /> constructor.
         /// </summary>
-        /// <param name="ctx">The php context.</param>
         /// <returns></returns>
         public static PhpArray getAvailableDrivers()
         {
@@ -140,7 +140,7 @@ namespace Peachpie.Library.PDO
             var dbCommand = this.m_con.CreateCommand();
             dbCommand.CommandText = statement;
             dbCommand.Transaction = this.m_tx;
-            dbCommand.CommandTimeout = (int)(this.m_attributes[ATTR_TIMEOUT]) * 1000;
+            dbCommand.CommandTimeout = (int)(this.m_attributes[PDO_ATTR.ATTR_TIMEOUT]) * 1000;
             return dbCommand;
         }
 
@@ -194,12 +194,6 @@ namespace Peachpie.Library.PDO
         }
 
         /// <inheritDoc />
-        public PhpValue getAttribute(int attribute)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritDoc />
         public string lastInsertId(string name = null)
         {
             return this.m_driver.GetLastInsertId(this, name);
@@ -208,87 +202,125 @@ namespace Peachpie.Library.PDO
         /// <inheritDoc />
         public PDOStatement prepare(string statement, PhpArray driver_options = null)
         {
-            throw new NotImplementedException();
+            PDOStatement stmt = new PDOStatement(this, statement, driver_options);
+            return stmt;
         }
 
         /// <inheritDoc />
+        [return: CastToFalse]
         public PDOStatement query(string statement, params PhpValue[] args)
         {
-            throw new NotImplementedException();
+            PDOStatement stmt = new PDOStatement(this, statement, null);
+            PDO_FETCH fetch = PDO_FETCH.FETCH_USE_DEFAULT;
+            if (args.Length > 0)
+            {
+                PhpValue fetchMode = args[0];
+                if (fetchMode.IsInteger())
+                {
+                    int value = (int)fetchMode.Long;
+                    if (Enum.IsDefined(typeof(PDO_FETCH), value))
+                    {
+                        fetch = (PDO_FETCH)value;
+                    }
+                }
+            }
+            int? colNo = null;
+            if (fetch == PDO_FETCH.FETCH_COLUMN)
+            {
+                if (args.Length > 2)
+                {
+                    colNo = (int)args[1].ToLong();
+                }
+                else
+                {
+                    //TODO what to do if missing parameter ?
+                    fetch = PDO_FETCH.FETCH_USE_DEFAULT;
+                }
+            }
+            string className = null;
+            PhpArray ctorArgs = null;
+            if (fetch == PDO_FETCH.FETCH_CLASS)
+            {
+                if (args.Length > 2)
+                {
+                    className = args[1].ToStringOrNull();
+                    if (args.Length > 3)
+                    {
+                        ctorArgs = args[2].ArrayOrNull();
+                    }
+                }
+                else
+                {
+                    //TODO what to do if missing parameter ?
+                    fetch = PDO_FETCH.FETCH_USE_DEFAULT;
+                }
+            }
+            PhpValue? fetchObject = null;
+            if (fetch == PDO_FETCH.FETCH_OBJ)
+            {
+                if (args.Length > 2)
+                {
+                    fetchObject = args[1];
+                    if (fetchObject.Value.IsNull)
+                    {
+                        //TODO passed object is null
+                    }
+                }
+                else
+                {
+                    //TODO what to do if missing parameter ?
+                    fetch = PDO_FETCH.FETCH_USE_DEFAULT;
+                }
+            }
+
+            if (stmt.execute())
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <inheritDoc />
-        public string quote(string str, int parameter_type = default(int))
+        [return: CastToFalse]
+        public string quote(string str, int parameter_type = PARAM_STR)
         {
-            throw new NotImplementedException();
+            PARAM param = PARAM.PARAM_NULL;
+            if(Enum.IsDefined(typeof(PARAM), parameter_type))
+            {
+                param = (PARAM)parameter_type;
+            }
+            return this.m_driver.Quote(str, param);
         }
 
         private void SetDefaultAttributes()
         {
-            this.m_attributes.Set(ATTR_AUTOCOMMIT, true);
-            this.m_attributes.Set(ATTR_PREFETCH, 0);
-            this.m_attributes.Set(ATTR_TIMEOUT, 30);
-            this.m_attributes.Set(ATTR_ERRMODE, ERRMODE_SILENT);
-            this.m_attributes.Set(ATTR_SERVER_VERSION, null);
-            this.m_attributes.Set(ATTR_CLIENT_VERSION, null);
-            this.m_attributes.Set(ATTR_SERVER_INFO, null);
-            this.m_attributes.Set(ATTR_CONNECTION_STATUS, null);
-            this.m_attributes.Set(ATTR_CASE, null);
-            this.m_attributes.Set(ATTR_CURSOR_NAME, null);
-            this.m_attributes.Set(ATTR_CURSOR, null);
-            this.m_attributes.Set(ATTR_DRIVER_NAME, "");
-            this.m_attributes.Set(ATTR_ORACLE_NULLS, null);
-            this.m_attributes.Set(ATTR_PERSISTENT, false);
-            this.m_attributes.Set(ATTR_STATEMENT_CLASS, null);
-            this.m_attributes.Set(ATTR_FETCH_CATALOG_NAMES, null);
-            this.m_attributes.Set(ATTR_FETCH_TABLE_NAMES, null);
-            this.m_attributes.Set(ATTR_STRINGIFY_FETCHES, null);
-            this.m_attributes.Set(ATTR_MAX_COLUMN_LEN, null);
-            this.m_attributes.Set(ATTR_DEFAULT_FETCH_MODE, FETCH_USE_DEFAULT);
-            this.m_attributes.Set(ATTR_EMULATE_PREPARES, false);
+            this.m_attributes.Set(PDO_ATTR.ATTR_AUTOCOMMIT, true);
+            this.m_attributes.Set(PDO_ATTR.ATTR_PREFETCH, 0);
+            this.m_attributes.Set(PDO_ATTR.ATTR_TIMEOUT, 30);
+            this.m_attributes.Set(PDO_ATTR.ATTR_ERRMODE, ERRMODE_SILENT);
+            this.m_attributes.Set(PDO_ATTR.ATTR_SERVER_VERSION, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CLIENT_VERSION, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_SERVER_INFO, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CONNECTION_STATUS, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CASE, PDO_CASE.CASE_LOWER);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CURSOR_NAME, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_CURSOR, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_DRIVER_NAME, "");
+            this.m_attributes.Set(PDO_ATTR.ATTR_ORACLE_NULLS, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_PERSISTENT, false);
+            this.m_attributes.Set(PDO_ATTR.ATTR_STATEMENT_CLASS, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_FETCH_CATALOG_NAMES, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_FETCH_TABLE_NAMES, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_STRINGIFY_FETCHES, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_MAX_COLUMN_LEN, null);
+            this.m_attributes.Set(PDO_ATTR.ATTR_DEFAULT_FETCH_MODE, PDO_FETCH.FETCH_USE_DEFAULT);
+            this.m_attributes.Set(PDO_ATTR.ATTR_EMULATE_PREPARES, false);
         }
 
-        /// <inheritDoc />
-        public bool setAttribute(int attribute, PhpValue value)
-        {
-            try
-            {
-                switch (attribute)
-                {
-                    case ATTR_AUTOCOMMIT:
-                        this.m_attributes.Set(attribute, value.ToBoolean());
-                        return true;
-                    case ATTR_PREFETCH:
-                        int prefetchValue = (int)value.ToLong();
-                        if (prefetchValue <= 0)
-                            throw new ArgumentOutOfRangeException();
-                        this.m_attributes.Set(attribute, prefetchValue);
-                        return true;
-                    case ATTR_TIMEOUT:
-                        int timeoutValue = (int)value.ToLong();
-                        if (timeoutValue < 0)
-                            throw new ArgumentOutOfRangeException();
-                        this.m_attributes.Set(attribute, timeoutValue);
-                        return true;
-                    case ATTR_ERRMODE:
-                        int errmodeValue = (int)value.ToLong();
-                        if (!new[] { ERRMODE_EXCEPTION, ERRMODE_SILENT, ERRMODE_WARNING }.Contains(errmodeValue))
-                            throw new ArgumentOutOfRangeException();
-                        this.m_attributes.Set(attribute, errmodeValue);
-                        return true;
-                }
-                if (attribute >= ATTR_DRIVER_SPECIFIC)
-                {
-                    return this.m_driver.TrySetAttribute(this.m_attributes, attribute, value);
-                }
-                throw new NotImplementedException();
-            }
-            catch (System.Exception ex)
-            {
-                this.HandleError(ex);
-                return false;
-            }
-        }
+      
 
         #region Interface artifacts
         /// <inheritDoc />

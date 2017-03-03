@@ -10,12 +10,24 @@ using Peachpie.Library.PDO;
 
 namespace Peachpie.PDO.Test
 {
+    /// <summary>
+    /// Base class for tests
+    /// </summary>
     public abstract class BaseTest
     {
+        /// <summary>
+        /// Initializes the <see cref="BaseTest"/> class.
+        /// </summary>
         static BaseTest()
         {
             PDOHelper.RegisterAllDrivers();
         }
+
+        /// <summary>
+        /// Gets the content of the test script.
+        /// </summary>
+        /// <param name="name">The resource name containing the php script test.</param>
+        /// <returns></returns>
         protected string GetTestScriptContent(string name)
         {
             var input = this.GetType().GetTypeInfo().Assembly.GetManifestResourceStream(name);
@@ -28,6 +40,11 @@ namespace Peachpie.PDO.Test
             }
         }
 
+        /// <summary>
+        /// Runs the test.
+        /// </summary>
+        /// <param name="name">The resource name containing the php script test.</param>
+        /// <exception cref="System.Exception">Invalid or empty script</exception>
         protected void RunTest(string name)
         {
             var script = this.GetTestScriptContent(name);
@@ -41,6 +58,11 @@ namespace Peachpie.PDO.Test
             }
         }
 
+        /// <summary>
+        /// Runs the test.
+        /// </summary>
+        /// <param name="ctx">The php context.</param>
+        /// <param name="script">The script content.</param>
         protected virtual void RunTest(TestPhpContext ctx, string script)
         {
             ctx.Eval(script);

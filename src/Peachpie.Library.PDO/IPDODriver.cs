@@ -17,7 +17,23 @@ namespace Peachpie.Library.PDO
         /// Gets the driver name (used in DSN)
         /// </summary>
         string Name { get; }
-      
+       
+        /// <summary>
+        /// Gets the client version.
+        /// </summary>
+        /// <value>
+        /// The client version.
+        /// </value>
+        string ClientVersion { get; }
+
+        /// <summary>
+        /// Gets the driver specific attribute value
+        /// </summary>
+        /// <param name="pdo">The pdo.</param>
+        /// <param name="attribute">The attribute.</param>
+        /// <returns></returns>
+        PhpValue GetAttribute(PDO pdo, int attribute);
+
         /// <summary>
         /// Gets the methods added to the PDO instance when this driver is used.
         /// </summary>
@@ -33,7 +49,7 @@ namespace Peachpie.Library.PDO
         /// <param name="options">The options.</param>
         /// <returns></returns>
         DbConnection OpenConnection(string dsn, string user, string password, PhpArray options);
-       
+
         /// <summary>
         /// Gets the last insert identifier.
         /// </summary>
@@ -49,6 +65,14 @@ namespace Peachpie.Library.PDO
         /// <param name="attribute">The attribute to set.</param>
         /// <param name="value">The value.</param>
         /// <returns>true if value is valid, or false if value can't be set.</returns>
-        bool TrySetAttribute(Dictionary<int, object> attributes, int attribute, PhpValue value);
+        bool TrySetAttribute(Dictionary<PDO.PDO_ATTR, object> attributes, PDO.PDO_ATTR attribute, PhpValue value);
+
+        /// <summary>
+        /// Quotes a string for use in a query.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="param">The parameter.</param>
+        /// <returns></returns>
+        string Quote(string str, PDO.PARAM param);
     }
 }

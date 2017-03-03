@@ -47,5 +47,11 @@ namespace Peachpie.Library.PDO.MySQL
                 return value?.ToString();
             }
         }
+
+        /// <inheritDoc />
+        public override string Quote(string str, PDO.PARAM param)
+        {
+            return MySqlHelper.EscapeString(str);
+        }
     }
 }
