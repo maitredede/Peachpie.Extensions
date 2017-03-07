@@ -144,6 +144,7 @@ namespace Peachpie.Library.PDO
             return stmt;
         }
 
+        /// <inheritDoc />
         public virtual DbDataReader OpenReader(PDO pdo, DbCommand cmd, PDO.PDO_CURSOR cursor)
         {
             return cmd.ExecuteReader();

@@ -57,6 +57,14 @@ namespace Peachpie.Library.PDO
         /// <param name="name">The name.</param>
         /// <returns></returns>
         string GetLastInsertId(PDO pDO, string name);
+       
+        /// <summary>
+        /// Opens a DataReader.
+        /// </summary>
+        /// <param name="pdo">The pdo.</param>
+        /// <param name="cmd">The command.</param>
+        /// <param name="cursor">The cursor configuration.</param>
+        /// <returns></returns>
         DbDataReader OpenReader(PDO pdo, DbCommand cmd, PDO.PDO_CURSOR cursor);
 
         /// <summary>

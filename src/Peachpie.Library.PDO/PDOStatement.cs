@@ -200,25 +200,23 @@ namespace Peachpie.Library.PDO
 
         private PhpArray ReadArray(bool assoc, bool num)
         {
-            PhpArray arr = PhpArray.NewEmpty();
+            PhpArray arr = new PhpArray();
             for (int i = 0; i < this.m_dr.FieldCount; i++)
             {
-                var strKey = new IntStringKey(this.m_dr_names[i]);
-                var intKey = new IntStringKey(i);
                 if (this.m_dr.IsDBNull(i))
                 {
                     if (assoc)
-                        arr.Set(strKey, PhpValue.Null);
+                        arr.Add(this.m_dr_names[i], PhpValue.Null);
                     if (num)
-                        arr.Set(intKey, PhpValue.Null);
+                        arr.Add(i, PhpValue.Null);
                 }
                 else
                 {
                     var value = PhpValue.FromClr(this.m_dr.GetValue(i));
                     if (assoc)
-                        arr.Set(strKey, value);
+                        arr.Add(this.m_dr_names[i], value);
                     if (num)
-                        arr.Set(intKey, value);
+                        arr.Add(i, value);
                 }
             }
             return arr;
@@ -249,15 +247,49 @@ namespace Peachpie.Library.PDO
         }
 
         /// <inheritDoc />
+        [return: CastToFalse]
         public PhpArray getColumnMeta(int column)
         {
-            throw new NotImplementedException();
+            if (this.m_dr == null)
+            {
+                return null;
+            }
+
+            if (column < 0 || column >= this.m_dr.FieldCount)
+                return null;
+
+            PhpArray meta = new PhpArray();
+            meta.Add("native_type", this.m_dr.GetFieldType(column).FullName);
+            meta.Add("driver:decl_type", this.m_dr.GetDataTypeName(column));
+            //meta.Add("flags", PhpValue.Null);
+            meta.Add("name", this.m_dr_names[column]);
+            //meta.Add("table", PhpValue.Null);
+            //meta.Add("len", PhpValue.Null);
+            //meta.Add("prevision", PhpValue.Null);
+            //meta.Add("pdo_type", (int)PDO.PARAM.PARAM_NULL);
+            return meta;
         }
 
         /// <inheritDoc />
         public bool nextRowset()
         {
-            throw new NotImplementedException();
+            if (this.m_dr == null)
+            {
+                return false;
+            }
+            if (this.m_dr.NextResult())
+            {
+                this.m_dr_names = new string[this.m_dr.FieldCount];
+                for (int i = 0; i < this.m_dr_names.Length; i++)
+                {
+                    this.m_dr_names[i] = this.m_dr.GetName(i);
+                }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <inheritDoc />
