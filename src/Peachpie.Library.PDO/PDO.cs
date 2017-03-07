@@ -24,6 +24,7 @@ namespace Peachpie.Library.PDO
         private Dictionary<string, ExtensionMethodDelegate> m_extensionMethods;
 
         internal DbTransaction CurrentTransaction { get { return this.m_tx; } }
+        internal IPDODriver Driver { get { return this.m_driver; } }
 
         /// <summary>
         /// Gets the native connection instance
@@ -200,10 +201,18 @@ namespace Peachpie.Library.PDO
         }
 
         /// <inheritDoc />
+        [return: CastToFalse]
         public PDOStatement prepare(string statement, PhpArray driver_options = null)
         {
-            PDOStatement stmt = new PDOStatement(this, statement, driver_options);
-            return stmt;
+            try
+            {
+                return this.m_driver.PrepareStatement(this, statement, driver_options);
+            }
+            catch (System.Exception ex)
+            {
+                this.HandleError(ex);
+                return null;
+            }
         }
 
         /// <inheritDoc />
@@ -288,7 +297,7 @@ namespace Peachpie.Library.PDO
         public string quote(string str, int parameter_type = PARAM_STR)
         {
             PARAM param = PARAM.PARAM_NULL;
-            if(Enum.IsDefined(typeof(PARAM), parameter_type))
+            if (Enum.IsDefined(typeof(PARAM), parameter_type))
             {
                 param = (PARAM)parameter_type;
             }
@@ -320,7 +329,7 @@ namespace Peachpie.Library.PDO
             this.m_attributes.Set(PDO_ATTR.ATTR_EMULATE_PREPARES, false);
         }
 
-      
+
 
         #region Interface artifacts
         /// <inheritDoc />

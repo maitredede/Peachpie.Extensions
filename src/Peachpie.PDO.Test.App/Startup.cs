@@ -44,8 +44,6 @@ namespace Peachpie.PDO.Test
                 }
             };
 
-            PDOHelper.RegisterAllDrivers();
-
             app.UsePhp(phpOptions);
             app.UseDefaultFiles();
             app.UseStaticFiles();

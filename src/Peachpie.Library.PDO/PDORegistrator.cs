@@ -1,9 +1,9 @@
 ﻿using Pchp.Core;
-using Pchp.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace Peachpie.Library.PDO
 {
@@ -12,6 +12,7 @@ namespace Peachpie.Library.PDO
         public PDORegistrator()
         {
             Context.RegisterConfiguration(new PDOConfiguration());
+            PDODriver.RegisterAllDrivers();
         }
     }
 }

@@ -31,5 +31,17 @@ namespace Peachpie.PDO.Test
         {
             this.RunTest("Peachpie.PDO.Test.SqliteDriver.ExecVacuum.php");
         }
+
+        [Fact]
+        public void PdoSqlite_CreateTable()
+        {
+            this.RunTest("Peachpie.PDO.Test.SqliteDriver.CreateTable.php");
+        }
+
+        [Fact]
+        public void PdoSqlite_LastInsertId()
+        {
+            this.RunTest("Peachpie.PDO.Test.SqliteDriver.LastInsertId.php");
+        }
     }
 }

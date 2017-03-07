@@ -20,7 +20,7 @@ namespace Peachpie.PDO.Test
         /// </summary>
         static BaseTest()
         {
-            PDOHelper.RegisterAllDrivers();
+            PDODriver.RegisterAllDrivers();
         }
 
         /// <summary>

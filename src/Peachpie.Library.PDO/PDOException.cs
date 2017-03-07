@@ -19,5 +19,15 @@ namespace Peachpie.Library.PDO
         public PDOException(string message) : base(message)
         {
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PDOException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="code">The code.</param>
+        /// <param name="previous">The previous.</param>
+        public PDOException(string message, long code, Throwable previous) : base(message, code, previous)
+        {
+        }
     }
 }

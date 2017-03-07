@@ -111,10 +111,22 @@ namespace Peachpie.Library.PDO
                             return true;
                         }
                         return false;
-
                     case PDO_ATTR.ATTR_CASE:
+                        int caseValue = (int)value.ToLong();
+                        if (Enum.IsDefined(typeof(PDO_CASE), caseValue))
+                        {
+                            this.m_attributes.Set(attribute, (PDO_CASE)caseValue);
+                            return true;
+                        }
+                        return false;
                     case PDO_ATTR.ATTR_CURSOR:
-                    case PDO_ATTR.ATTR_CURSOR_NAME:
+                        int cursorValue = (int)value.ToLong();
+                        if (Enum.IsDefined(typeof(PDO_CURSOR), cursorValue))
+                        {
+                            this.m_attributes.Set(attribute, (PDO_CURSOR)cursorValue);
+                            return true;
+                        }
+                        return false;
                     case PDO_ATTR.ATTR_DEFAULT_FETCH_MODE:
                     case PDO_ATTR.ATTR_FETCH_CATALOG_NAMES:
                     case PDO_ATTR.ATTR_FETCH_TABLE_NAMES:
@@ -124,11 +136,16 @@ namespace Peachpie.Library.PDO
                     case PDO_ATTR.ATTR_STATEMENT_CLASS:
                     case PDO_ATTR.ATTR_STRINGIFY_FETCHES:
                         throw new NotImplementedException();
+
+                    //statement only
+                    case PDO_ATTR.ATTR_CURSOR_NAME:
+                        return false;
+
                     default:
                         return false;
                 }
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 this.HandleError(ex);
                 return false;

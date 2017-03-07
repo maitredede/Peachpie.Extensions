@@ -57,6 +57,7 @@ namespace Peachpie.Library.PDO
         /// <param name="name">The name.</param>
         /// <returns></returns>
         string GetLastInsertId(PDO pDO, string name);
+        DbDataReader OpenReader(PDO pdo, DbCommand cmd, PDO.PDO_CURSOR cursor);
 
         /// <summary>
         /// Tries to set a driver specific attribute value.
@@ -74,5 +75,14 @@ namespace Peachpie.Library.PDO
         /// <param name="param">The parameter.</param>
         /// <returns></returns>
         string Quote(string str, PDO.PARAM param);
+        
+        /// <summary>
+        /// Prepare a PDO statement
+        /// </summary>
+        /// <param name="pdo">The pdo.</param>
+        /// <param name="statement">The statement.</param>
+        /// <param name="driver_options">The driver options.</param>
+        /// <returns></returns>
+        PDOStatement PrepareStatement(PDO pdo, string statement, PhpArray driver_options);
     }
 }

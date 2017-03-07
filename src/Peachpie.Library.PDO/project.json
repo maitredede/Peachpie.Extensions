@@ -3,9 +3,9 @@
 
   "dependencies": {
     "NETStandard.Library": "1.6.1",
-
     "Peachpie.Runtime": "0.5.0-preview4",
-    "Peachpie.Library": "0.5.0-preview4"
+    "Peachpie.Library": "0.5.0-preview4",
+    "Microsoft.Extensions.DependencyModel": "1.1.0"
   },
 
   "buildOptions": {
@@ -15,7 +15,10 @@
 
   "frameworks": {
     "netstandard1.6": {
-      "imports": "dnxcore50"
+      "imports": "dnxcore50",
+      "dependencies": {
+        "System.Reflection.TypeExtensions": "4.3.0"
+      }
     },
     "net46": {
     }

@@ -17,8 +17,10 @@ namespace Peachpie.Library.PDO
         private readonly string m_stmt;
         private readonly PhpArray m_options;
 
-        private DbCommand m_cmd;
+        private readonly DbCommand m_cmd;
         private DbDataReader m_dr;
+        private readonly Dictionary<PDO.PDO_ATTR, object> m_attributes = new Dictionary<PDO.PDO_ATTR, object>();
+        private string[] m_dr_names;
 
 
         /// <summary>
@@ -32,24 +34,46 @@ namespace Peachpie.Library.PDO
             this.m_pdo = pdo;
             this.m_stmt = statement;
             this.m_options = driver_options ?? PhpArray.Empty;
+
+            this.m_cmd = pdo.CreateCommand(this.m_stmt);
+
+            this.SetDefaultAttributes();
+        }
+
+        private void SetDefaultAttributes()
+        {
+            this.m_attributes.Set(PDO.PDO_ATTR.ATTR_CURSOR, PDO.PDO_CURSOR.CURSOR_FWDONLY);
         }
 
         /// <inheritDoc />
         void IDisposable.Dispose()
         {
             this.m_dr?.Dispose();
-            this.m_cmd?.Dispose();
+            this.m_cmd.Dispose();
         }
 
         private void OpenReader()
         {
-            if (this.m_cmd == null)
-            {
-                this.m_cmd = this.m_pdo.CreateCommand(this.m_stmt);
-            }
             if (this.m_dr == null)
             {
-                this.m_dr = this.m_cmd.ExecuteReader();
+                PDO.PDO_CURSOR cursor = (PDO.PDO_CURSOR)this.m_attributes[PDO.PDO_ATTR.ATTR_CURSOR];
+                this.m_dr = this.m_pdo.Driver.OpenReader(this.m_pdo, this.m_cmd, cursor);
+                switch (cursor)
+                {
+                    case PDO.PDO_CURSOR.CURSOR_FWDONLY:
+                        this.m_dr = this.m_cmd.ExecuteReader();
+                        break;
+                    case PDO.PDO_CURSOR.CURSOR_SCROLL:
+                        this.m_dr = this.m_cmd.ExecuteReader();
+                        break;
+                    default:
+                        throw new InvalidProgramException();
+                }
+                this.m_dr_names = new string[this.m_dr.FieldCount];
+                for (int i = 0; i < this.m_dr_names.Length; i++)
+                {
+                    this.m_dr_names[i] = this.m_dr.GetName(i);
+                }
             }
         }
 
@@ -121,7 +145,83 @@ namespace Peachpie.Library.PDO
         /// <inheritDoc />
         public PhpValue fetch(int? fetch_style = default(int?), int cursor_orientation = default(int), int cursor_offet = 0)
         {
-            throw new NotImplementedException();
+            this.m_pdo.ClearError();
+            try
+            {
+                PDO.PDO_FETCH style = PDO.PDO_FETCH.FETCH_BOTH;
+                if (fetch_style.HasValue && Enum.IsDefined(typeof(PDO.PDO_FETCH), fetch_style.Value))
+                {
+                    style = (PDO.PDO_FETCH)fetch_style.Value;
+                }
+                PDO.PDO_FETCH_ORI ori = PDO.PDO_FETCH_ORI.FETCH_ORI_NEXT;
+                if (Enum.IsDefined(typeof(PDO.PDO_FETCH_ORI), cursor_orientation))
+                {
+                    ori = (PDO.PDO_FETCH_ORI)cursor_orientation;
+                }
+
+                switch (ori)
+                {
+                    case PDO.PDO_FETCH_ORI.FETCH_ORI_NEXT:
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+
+                if (!this.m_dr.Read())
+                    return PhpValue.False;
+
+                switch (style)
+                {
+                    case PDO.PDO_FETCH.FETCH_OBJ:
+                        return this.ReadObj();
+                    case PDO.PDO_FETCH.FETCH_ASSOC:
+                        return PhpValue.Create(this.ReadArray(true, false));
+                    case PDO.PDO_FETCH.FETCH_BOTH:
+                    case PDO.PDO_FETCH.FETCH_USE_DEFAULT:
+                        return PhpValue.Create(this.ReadArray(true, true));
+                    case PDO.PDO_FETCH.FETCH_NUM:
+                        return PhpValue.Create(this.ReadArray(false, true));
+                    default:
+                        throw new NotImplementedException();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                this.m_pdo.HandleError(ex);
+                return PhpValue.False;
+            }
+        }
+
+        private PhpValue ReadObj()
+        {
+            return PhpValue.FromClass(this.ReadArray(true, false).ToClass());
+        }
+
+
+        private PhpArray ReadArray(bool assoc, bool num)
+        {
+            PhpArray arr = PhpArray.NewEmpty();
+            for (int i = 0; i < this.m_dr.FieldCount; i++)
+            {
+                var strKey = new IntStringKey(this.m_dr_names[i]);
+                var intKey = new IntStringKey(i);
+                if (this.m_dr.IsDBNull(i))
+                {
+                    if (assoc)
+                        arr.Set(strKey, PhpValue.Null);
+                    if (num)
+                        arr.Set(intKey, PhpValue.Null);
+                }
+                else
+                {
+                    var value = PhpValue.FromClr(this.m_dr.GetValue(i));
+                    if (assoc)
+                        arr.Set(strKey, value);
+                    if (num)
+                        arr.Set(intKey, value);
+                }
+            }
+            return arr;
         }
 
         /// <inheritDoc />

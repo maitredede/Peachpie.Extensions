@@ -9,11 +9,13 @@ using System.Data.SQLite;
 using Factory = System.Data.SQLite.SQLiteFactory;
 using Connection = System.Data.SQLite.SQLiteConnection;
 using ConnectionStringBuilder = System.Data.SQLite.SQLiteConnectionStringBuilder;
+using Command = System.Data.SQLite.SQLiteCommand;
 #else
 using Microsoft.Data.Sqlite;
 using Factory = Microsoft.Data.Sqlite.SqliteFactory;
 using Connection = Microsoft.Data.Sqlite.SqliteConnection;
 using ConnectionStringBuilder = Microsoft.Data.Sqlite.SqliteConnectionStringBuilder;
+using Command = Microsoft.Data.Sqlite.SqliteCommand;
 #endif
 
 namespace Peachpie.Library.PDO.Sqlite
@@ -84,7 +86,7 @@ namespace Peachpie.Library.PDO.Sqlite
 
         public override string GetLastInsertId(PDO pdo, string name)
         {
-            using (var cmd = pdo.CreateCommand("SELECT LAST_INSERT_ROW_ID()"))
+            using (var cmd = pdo.CreateCommand("SELECT LAST_INSERT_ROWID()"))
             {
                 object value = cmd.ExecuteScalar();
                 return value?.ToString();

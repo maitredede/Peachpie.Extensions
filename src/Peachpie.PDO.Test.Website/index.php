@@ -40,8 +40,16 @@
 
 echo "<hr />";
 $pdo = new PDO('sqlite::memory:');
-$result = $pdo->exec("VACUUM");
+$result = $pdo->exec("CREATE TABLE data (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, value VARCHAR(100) NULL);");
 var_dump($result);
+echo "<br />";
+$result = $pdo->exec("INSERT INTO data (value) VALUES ('test')");
+var_dump($result);
+$id = $pdo->lastInsertId();
+var_dump($id);
+echo "<br />";
+
+echo "<hr />";
 echo "<p>the end.</p>";
 ?>
 </body>

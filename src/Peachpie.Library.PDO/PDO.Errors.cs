@@ -11,15 +11,45 @@ namespace Peachpie.Library.PDO
         private PhpValue m_errorCode;
         private PhpValue m_errorInfo;
 
-        private void ClearError()
+        /// <summary>
+        /// Clears the error.
+        /// </summary>
+        [PhpHidden]
+        public void ClearError()
         {
             this.m_errorCode = PhpValue.Null;
             this.m_errorInfo = PhpValue.Null;
         }
 
-        private void HandleError(System.Exception ex)
+        /// <summary>
+        /// Handles the error.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        /// <exception cref="Peachpie.Library.PDO.PDOException">
+        /// </exception>
+        [PhpHidden]
+        public void HandleError(System.Exception ex)
         {
-            throw new NotImplementedException();
+            PDO_ERRMODE mode = (PDO_ERRMODE)this.m_attributes[PDO_ATTR.ATTR_ERRMODE];
+            //TODO : fill errorCode and errorInfo
+            switch (mode)
+            {
+                case PDO_ERRMODE.ERRMODE_SILENT:
+                    break;
+                case PDO_ERRMODE.ERRMODE_WARNING:
+                    this.m_ctx.Throw(PhpError.E_WARNING, ex.Message);
+                    break;
+                case PDO_ERRMODE.ERRMODE_EXCEPTION:
+                    if (ex is global::Exception)
+                    {
+                        var pex = (global::Exception)ex;
+                        throw new PDOException(pex.Message, pex.getCode(), pex);
+                    }
+                    else
+                    {
+                        throw new PDOException(ex.GetType().Name + ": " + ex.Message);
+                    }
+            }
         }
 
         /// <inheritDoc />

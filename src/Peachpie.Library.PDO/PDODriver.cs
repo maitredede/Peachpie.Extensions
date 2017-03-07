@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Specialized;
 using System.Reflection;
+using Microsoft.Extensions.DependencyModel;
 
 namespace Peachpie.Library.PDO
 {
@@ -94,6 +95,58 @@ namespace Peachpie.Library.PDO
         public virtual PhpValue GetAttribute(PDO pdo, int attribute)
         {
             return PhpValue.Null;
+        }
+
+        /// <summary>
+        /// Registers all referenced PDO drivers.
+        /// </summary>
+        public static void RegisterAllDrivers()
+        {
+            //Find all assemblies referencing the PDO library and tagged with PDODriverAssemblyAttribute
+            //Drivers must implement IPDODriver
+            string PdoLib = typeof(PDODriverAssemblyAttribute).GetTypeInfo().Assembly.GetName().Name;
+            Type iDriver = typeof(IPDODriver);
+            var driverTypes = new List<Type>();
+
+            //Seach in all assemblies
+            foreach (var lib in DependencyContext.Default.RuntimeLibraries)
+            {
+                if (lib.Dependencies.Any(d => d.Name == PdoLib))
+                {
+                    var asm = Assembly.Load(new AssemblyName(lib.Name));
+                    if (asm.GetCustomAttribute<PDODriverAssemblyAttribute>() != null)
+                    {
+                        foreach (var asmType in asm.GetTypes())
+                        {
+                            var asmTypeInfo = asmType.GetTypeInfo();
+                            if (asmTypeInfo.IsClass && !asmTypeInfo.IsAbstract && iDriver.IsAssignableFrom(asmType) && asmTypeInfo.GetConstructor(Type.EmptyTypes) != null)
+                            {
+                                driverTypes.Add(asmType);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //Register the found drivers
+            var method = typeof(PDOEngine).GetMethod(nameof(PDOEngine.RegisterDriver));
+            foreach (var type in driverTypes)
+            {
+                var registerDriver = method.MakeGenericMethod(type);
+                registerDriver.Invoke(null, null);
+            }
+        }
+
+        /// <inheritDoc />
+        public virtual PDOStatement PrepareStatement(PDO pdo, string statement, PhpArray driver_options)
+        {
+            PDOStatement stmt = new PDOStatement(pdo, statement, driver_options);
+            return stmt;
+        }
+
+        public virtual DbDataReader OpenReader(PDO pdo, DbCommand cmd, PDO.PDO_CURSOR cursor)
+        {
+            return cmd.ExecuteReader();
         }
     }
 }
