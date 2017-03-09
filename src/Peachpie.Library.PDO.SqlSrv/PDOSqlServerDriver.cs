@@ -32,15 +32,13 @@ namespace Peachpie.Library.PDO.SqlSrv
         }
 
         /// <inheritDoc />
-        public override Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritDoc />
         protected override string BuildConnectionString(string dsn, string user, string password, PhpArray options)
         {
-            throw new NotImplementedException();
+            //TODO sqlserver pdo dsn to dotnet connectionstring
+            var csb = new SqlConnectionStringBuilder(dsn);
+            csb.UserID = user;
+            csb.Password = password;
+            return csb.ConnectionString;
         }
     }
 }

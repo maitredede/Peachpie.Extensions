@@ -74,7 +74,10 @@ namespace Peachpie.Library.PDO
         }
 
         /// <inheritDoc />
-        public abstract Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods();
+        public virtual Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
+        {
+            return new Dictionary<string, ExtensionMethodDelegate>();
+        }
 
         /// <inheritDoc />
         public abstract string GetLastInsertId(PDO pdo, string name);
@@ -133,7 +136,15 @@ namespace Peachpie.Library.PDO
             foreach (var type in driverTypes)
             {
                 var registerDriver = method.MakeGenericMethod(type);
-                registerDriver.Invoke(null, null);
+                try
+                {
+                    registerDriver.Invoke(null, null);
+                }
+                catch (System.Exception ex)
+                {
+                    //TODO better error handling
+                    Console.Error.WriteLine($"Could not load driver '{type.FullName}' : {ex.GetType().FullName}: {ex.Message}");
+                }
             }
         }
 

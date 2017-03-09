@@ -33,12 +33,6 @@ namespace Peachpie.Library.PDO.MySQL
         }
 
         /// <inheritDoc />
-        public override Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
-        {
-            return new Dictionary<string, ExtensionMethodDelegate>();
-        }
-
-        /// <inheritDoc />
         public override string GetLastInsertId(PDO pdo, string name)
         {
             using (var cmd = pdo.CreateCommand("SELECT LAST_INSERT_ID()"))

@@ -32,12 +32,6 @@ namespace Peachpie.Library.PDO.Firebird
         }
 
         /// <inheritDoc />
-        public override Dictionary<string, ExtensionMethodDelegate> GetPDObjectExtensionMethods()
-        {
-            return new Dictionary<string, ExtensionMethodDelegate>();
-        }
-
-        /// <inheritDoc />
         public override string GetLastInsertId(PDO pdo, string name)
         {
             //TODO firebird pdo characters escaping
