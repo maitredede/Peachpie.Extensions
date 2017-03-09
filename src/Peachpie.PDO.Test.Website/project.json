@@ -1,18 +1,24 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
+    "Peachpie.App": "0.5.0-preview5",
+    "Peachpie.Compiler.Tools": {
+      "version": "0.5.0-preview5",
+      "type": "build"
+    },
     "Peachpie.Library.PDO": { "target": "project" },
     "Peachpie.Library.PDO.Firebird": { "target": "project" },
+    "Peachpie.Library.PDO.IBM": { "target": "project" },
     "Peachpie.Library.PDO.MySQL": { "target": "project" },
     "Peachpie.Library.PDO.PgSQL": { "target": "project" },
     "Peachpie.Library.PDO.Sqlite": { "target": "project" },
     "Peachpie.Library.PDO.SqlSrv": { "target": "project" },
-    "Peachpie.App": "0.5.0-preview4"
+    "Peachpie.Library.PhpInfo": { "target": "project" }
   },
 
   "tools": {
-    "Peachpie.Compiler.Tools": "0.5.0-preview4"
+    "Peachpie.Compiler.Tools": "0.5.0-preview5"
   },
 
   "buildOptions": {
